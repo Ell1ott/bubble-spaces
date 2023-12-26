@@ -8,12 +8,17 @@
 
 	console.log(circles);
 
-	circles = circles;
-	onMount(() => {
+	let ref: HTMLElement;
+
+	function sleep(ms: number) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
+	}
+	onMount(async () => {
 		for (let i = 0; i < 200; i++) {
 			let colorIndex = Math.floor(Math.random() * 4);
 
 			const z = Math.random() * 500;
+
 			circles.push({
 				style: `
 				left: ${Math.random() * 100}%;
@@ -22,17 +27,19 @@
 				opacity: ${z / 500};
 
 				background-color: var(--circle-color-${colorIndex});
-				
+
 			`
 			});
+			await sleep(1);
 			circles = circles;
+			console.log('hi');
 		}
 	});
 </script>
 
 <div class="hero"></div>
 <div class="circles">
-	<div class="helper">
+	<div class="helper" bind:this={ref}>
 		<div class="center-text">
 			<h1 class="bubble fade-in">Bubble</h1>
 			<h1 class="spaces fade-in">Spaces</h1>
@@ -41,6 +48,7 @@
 				platform, it's a creative sanctuary where curiosity meets coding.
 			</p>
 		</div>
+		<div class="circle"></div>
 		{#each circles as { style }}
 			<div class="circle" {style}></div>
 		{/each}
@@ -119,6 +127,8 @@
 		background-color: blue;
 		border-radius: 100%;
 		transform-style: preserve-3d;
+
+		animation: cubic-bezier(0, 1.18, 0.39, 0.97) scale-in 1s;
 	}
 
 	.hero {
@@ -128,6 +138,15 @@
 	.fade-in {
 		animation: cubic-bezier(0.64, -0.03, 0.2, 0.97) fade-in 2s;
 		animation-fill-mode: backwards;
+	}
+
+	@keyframes scale-in {
+		from {
+			scale: 0;
+		}
+		to {
+			scale: 1;
+		}
 	}
 
 	.circles {
@@ -151,7 +170,7 @@
 	.helper {
 		height: 100%;
 		width: 100%;
-		animation: linear lol;
+		animation: linear parralax;
 		/* animation-iteration-count: infinite; */
 		/* animation-duration: 10s; */
 		/* animation-timing-function: scroll(); */
@@ -160,7 +179,7 @@
 		transform-style: preserve-3d;
 	}
 
-	@keyframes lol {
+	@keyframes parralax {
 		from {
 			transform: translateY(0);
 		}
