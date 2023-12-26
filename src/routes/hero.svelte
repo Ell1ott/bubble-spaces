@@ -79,6 +79,14 @@
 		{#each circles as { style }}
 			<div class="circle" {style}></div>
 		{/each}
+		<div class="center-text copy">
+			<h1 class="bubble fade-in">Bubble</h1>
+			<h1 class="spaces fade-in">Spaces</h1>
+			<p class="fade-in">
+				Discover Bubble Spaces – a dynamic realm of learning and coding innovation. Much more than a
+				platform, it's a creative sanctuary where curiosity meets coding.
+			</p>
+		</div>
 	</div>
 </div>
 
@@ -135,6 +143,11 @@
 		}
 	}
 
+	.center-text.copy {
+		transform: translateZ(350px) translate(calc(-50% + 10px), calc(-50% + 10px));
+		filter: brightness(0) saturate(0) blur(5px);
+		opacity: 0.2;
+	}
 	.circle {
 		position: absolute;
 
