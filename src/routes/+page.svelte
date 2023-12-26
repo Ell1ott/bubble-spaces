@@ -14,7 +14,7 @@
 
 	function calculateCircelCount() {
 		const circelAmount = (window.innerWidth * window.innerHeight) / 20000 + 10;
-		return Math.floor(circelAmount);
+		return Math.min(400, Math.floor(circelAmount));
 	}
 
 	function addCircel() {
@@ -45,7 +45,11 @@
 			if (optimalCircleCount > currentCircleCount) {
 				console.log('rezise');
 				for (let i = 0; i < optimalCircleCount - currentCircleCount; i++) {
+					if (optimalCircleCount != calculateCircelCount()) {
+						break;
+					}
 					addCircel();
+
 					circles = circles;
 					await sleep(1);
 				}
@@ -58,6 +62,7 @@
 		for (let i = 0; i < calculateCircelCount(); i++) {
 			// filter: blur(${Math.abs(400 - z) / 100}px);
 			addCircel();
+
 			await sleep(1);
 			circles = circles;
 		}
