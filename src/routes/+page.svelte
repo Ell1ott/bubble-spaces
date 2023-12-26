@@ -6,33 +6,60 @@
 
 	let colors = ['#00828d', '#00548d', '#8d008a', '#008d6b'];
 
-	console.log(circles);
-
 	let ref: HTMLElement;
 
 	function sleep(ms: number) {
 		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
-	onMount(async () => {
-		for (let i = 0; i < 200; i++) {
-			let colorIndex = Math.floor(Math.random() * 4);
 
-			const z = Math.random() * 500;
+	function calculateCircelCount() {
+		const circelAmount = (window.innerWidth * window.innerHeight) / 20000 + 10;
+		return Math.floor(circelAmount);
+	}
 
-			circles.push({
-				style: `
-				left: ${Math.random() * 100}%;
+	function addCircel() {
+		let colorIndex = Math.floor(Math.random() * 4);
+
+		const z = Math.random() * 500;
+
+		circles.push({
+			style: `left: ${Math.random() * 100}%;
 				top: ${Math.random() * 100}%;
 				transform: translateZ(${z}px);
 				opacity: ${z / 500};
+				background-color: var(--circle-color-${colorIndex});`
+		});
+	}
+	onMount(async () => {
+		window.addEventListener('resize', async () => {
+			const optimalCircleCount = calculateCircelCount();
+			const currentCircleCount = circles.length;
+			if (optimalCircleCount == currentCircleCount) {
+				return;
+			}
 
-				background-color: var(--circle-color-${colorIndex});
+			if (optimalCircleCount < currentCircleCount) {
+				circles = circles.slice(0, optimalCircleCount);
+			}
 
-			`
-			});
+			if (optimalCircleCount > currentCircleCount) {
+				console.log('rezise');
+				for (let i = 0; i < optimalCircleCount - currentCircleCount; i++) {
+					addCircel();
+					circles = circles;
+					await sleep(1);
+				}
+			}
+		});
+		console.log(window.innerHeight);
+
+		console.log(calculateCircelCount());
+
+		for (let i = 0; i < calculateCircelCount(); i++) {
+			// filter: blur(${Math.abs(400 - z) / 100}px);
+			addCircel();
 			await sleep(1);
 			circles = circles;
-			console.log('hi');
 		}
 	});
 </script>
@@ -48,7 +75,6 @@
 				platform, it's a creative sanctuary where curiosity meets coding.
 			</p>
 		</div>
-		<div class="circle"></div>
 		{#each circles as { style }}
 			<div class="circle" {style}></div>
 		{/each}
@@ -75,11 +101,12 @@
 		height: 100vh;
 	}
 	.center-text {
+		max-width: 50%;
 		position: absolute;
 		top: 50%;
 		left: 50%;
 
-		line-height: 25px;
+		line-height: 1.1em;
 
 		transform: translateZ(400px) translate(-50%, -50%);
 
@@ -88,34 +115,40 @@
 		align-items: center;
 
 		text-align: center;
+		font-size: min(50px, 6vw);
 		h1 {
 			font-family: 'League Spartan', sans-serif;
-			margin: 30px;
-
+			margin: 0;
 			font-weight: 1000;
-			font-size: 80px;
-			letter-spacing: 5px;
+			// letter-spacing: 5px;
+			letter-spacing: 0.05em;
 		}
 
 		p {
 			color: rgba(255, 255, 255, 0.6);
 			font-weight: 400;
-			font-size: 15px;
-			line-height: 18px;
+			font-size: min(15px, 3vw);
+			line-height: 1em;
 
 			max-width: 400px;
 
 			animation-delay: 300ms;
+
+			margin-top: 30px;
+
+			@media screen and (max-height: 600px) {
+				display: none;
+			}
 		}
 
 		.bubble {
-			transform: translate(25px, 40px);
+			transform: translate(0.28em, 0);
 			margin-top: -10px;
 		}
 
 		.spaces {
 			animation-delay: 100ms;
-			transform: translate(-25px, 0px);
+			transform: translate(-0.28em, 0px);
 		}
 	}
 
