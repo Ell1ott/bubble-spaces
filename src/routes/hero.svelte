@@ -65,21 +65,20 @@
 	});
 </script>
 
-<div class="hero">
-	<div class="circles">
-		<div class="helper">
-			<div class="center-text">
-				<h1 class="bubble fade-in">Bubble</h1>
-				<h1 class="spaces fade-in">Spaces</h1>
-				<p class="fade-in">
-					Discover Bubble Spaces – a dynamic realm of learning and coding innovation. Much more than
-					a platform, it's a creative sanctuary where curiosity meets coding.
-				</p>
-			</div>
-			{#each circles as { style }}
-				<div class="circle" {style}></div>
-			{/each}
+<div class="hero"></div>
+<div class="circles">
+	<div class="helper">
+		<div class="center-text">
+			<h1 class="bubble fade-in">Bubble</h1>
+			<h1 class="spaces fade-in">Spaces</h1>
+			<p class="fade-in">
+				Discover Bubble Spaces – a dynamic realm of learning and coding innovation. Much more than a
+				platform, it's a creative sanctuary where curiosity meets coding.
+			</p>
 		</div>
+		{#each circles as { style }}
+			<div class="circle" {style}></div>
+		{/each}
 	</div>
 </div>
 
@@ -153,8 +152,6 @@
 		--circle-color-2: #00548d;
 		--circle-color-3: #8d008a;
 		--circle-color-4: #008d6b;
-
-		overflow: hidden;
 		position: fixed;
 		left: 0;
 		right: 0;
@@ -166,11 +163,6 @@
 		transform-style: preserve-3d;
 		perspective: 1000px;
 		perspective-origin: center;
-
-		animation: linear parralax;
-
-		animation-timeline: scroll();
-		animation-range-end: 10000px;
 	}
 
 	.hero {
@@ -180,11 +172,12 @@
 	.helper {
 		height: 100%;
 		width: 100%;
-
+		animation: linear parralax;
 		/* animation-iteration-count: infinite; */
 		/* animation-duration: 10s; */
 		/* animation-timing-function: scroll(); */
-
+		animation-timeline: scroll();
+		animation-range-end: 10000px;
 		transform-style: preserve-3d;
 	}
 
@@ -199,10 +192,10 @@
 
 	@keyframes parralax {
 		from {
-			perspective-origin: center center;
+			transform: translateY(0);
 		}
 		to {
-			perspective-origin: center calc(10000px + 50vh);
+			transform: translateY(-4000px);
 		}
 	}
 </style>
