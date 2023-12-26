@@ -9,7 +9,7 @@
 	}
 
 	function calculateCircelCount() {
-		const circelAmount = (window.innerWidth * window.innerHeight) / 20000 + 10;
+		const circelAmount = (window.innerWidth * window.innerHeight) / 1000 + 10;
 		return Math.min(400, Math.floor(circelAmount));
 	}
 
@@ -26,7 +26,30 @@
 				background-color: var(--circle-color-${colorIndex});`
 		});
 	}
+
+	let perspectiveStyle = 'perspective-origin: center;';
+
+	let msx = 0;
+	let msy = 0;
+
+	function updatePerspective(mouseSens: number) {
+		const x = msx * mouseSens + window.innerWidth * (0.5 - mouseSens / 2) + window.scrollX;
+		const y = msy * mouseSens + window.innerHeight * (0.5 - mouseSens / 2) + window.scrollY;
+		perspectiveStyle = `perspective-origin: ${x}px ${y}px`;
+	}
 	onMount(async () => {
+		msx = window.innerWidth / 2;
+		msy = window.innerHeight / 2;
+		window.addEventListener('mousemove', (ev) => {
+			msx = ev.clientX;
+			msy = ev.clientY;
+			updatePerspective(-0.3);
+		});
+
+		window.addEventListener('scroll', (ev) => {
+			updatePerspective(-0.3);
+		});
+
 		window.addEventListener('resize', async () => {
 			const optimalCircleCount = calculateCircelCount();
 			const currentCircleCount = circles.length;
@@ -65,27 +88,28 @@
 	});
 </script>
 
-<div class="hero"></div>
-<div class="circles">
-	<div class="helper">
-		<div class="center-text">
-			<h1 class="bubble fade-in">Bubble</h1>
-			<h1 class="spaces fade-in">Spaces</h1>
-			<p class="fade-in">
-				Discover Bubble Spaces – a dynamic realm of learning and coding innovation. Much more than a
-				platform, it's a creative sanctuary where curiosity meets coding.
-			</p>
-		</div>
-		{#each circles as { style }}
-			<div class="circle" {style}></div>
-		{/each}
-		<div class="center-text copy">
-			<h1 class="bubble fade-in">Bubble</h1>
-			<h1 class="spaces fade-in">Spaces</h1>
-			<p class="fade-in">
-				Discover Bubble Spaces – a dynamic realm of learning and coding innovation. Much more than a
-				platform, it's a creative sanctuary where curiosity meets coding.
-			</p>
+<div class="hero">
+	<div class="circles" style={perspectiveStyle}>
+		<div class="helper">
+			<div class="center-text">
+				<h1 class="bubble fade-in">Bubble</h1>
+				<h1 class="spaces fade-in">Spaces</h1>
+				<p class="fade-in">
+					Discover Bubble Spaces – a dynamic realm of learning and coding innovation. Much more than
+					a platform, it's a creative sanctuary where curiosity meets coding.
+				</p>
+			</div>
+			{#each circles as { style }}
+				<div class="circle" {style}></div>
+			{/each}
+			<div class="center-text copy">
+				<h1 class="bubble fade-in">Bubble</h1>
+				<h1 class="spaces fade-in">Spaces</h1>
+				<p class="fade-in">
+					Discover Bubble Spaces – a dynamic realm of learning and coding innovation. Much more than
+					a platform, it's a creative sanctuary where curiosity meets coding.
+				</p>
+			</div>
 		</div>
 	</div>
 </div>
@@ -165,17 +189,16 @@
 		--circle-color-2: #00548d;
 		--circle-color-3: #8d008a;
 		--circle-color-4: #008d6b;
-		position: fixed;
+		// position: fixed;
 		left: 0;
 		right: 0;
 		top: 0;
 		width: 100%;
 		height: 100vh;
-
+		overflow: hidden;
 		/* transform: perspective(600px); */
 		transform-style: preserve-3d;
 		perspective: 1000px;
-		perspective-origin: center;
 	}
 
 	.hero {
@@ -185,7 +208,8 @@
 	.helper {
 		height: 100%;
 		width: 100%;
-		animation: linear parralax;
+		// overflow: hidden;
+		// animation: linear parralax;
 		/* animation-iteration-count: infinite; */
 		/* animation-duration: 10s; */
 		/* animation-timing-function: scroll(); */
